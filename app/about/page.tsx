@@ -1,15 +1,47 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { CheckCircle, TrendingUp, Users, Truck, MapPin, Shield, Clock, Award } from "lucide-react"
-import { motion } from "framer-motion"
+import { motion, useInView } from "framer-motion"
+
+// Counter animation component
+function CountUp({ target, suffix = "", duration = 2 }: { target: number; suffix?: string; duration?: number }) {
+    const [count, setCount] = useState(0)
+    const ref = useRef<HTMLSpanElement>(null)
+    const isInView = useInView(ref, { once: true, margin: "-50px" })
+    const hasAnimated = useRef(false)
+
+    useEffect(() => {
+        if (!isInView || hasAnimated.current) return
+        hasAnimated.current = true
+
+        const startTime = performance.now()
+        const animate = (currentTime: number) => {
+            const elapsed = (currentTime - startTime) / 1000
+            const progress = Math.min(elapsed / duration, 1)
+            // Ease-out cubic for smooth deceleration
+            const eased = 1 - Math.pow(1 - progress, 3)
+            setCount(Math.floor(eased * target))
+
+            if (progress < 1) {
+                requestAnimationFrame(animate)
+            } else {
+                setCount(target)
+            }
+        }
+        requestAnimationFrame(animate)
+    }, [isInView, target, duration])
+
+    return <span ref={ref}>{count.toLocaleString()}{suffix}</span>
+}
 
 const stats = [
-    { value: "500+", label: "Trusted Carriers", icon: Truck },
-    { value: "10K+", label: "Shipments Delivered", icon: TrendingUp },
-    { value: "98%", label: "On-Time Rate", icon: Clock },
-    { value: "24/7", label: "Support Available", icon: Shield },
+    { numericValue: 500, suffix: "+", label: "Trusted Carriers", icon: Truck },
+    { numericValue: 10, suffix: "K+", label: "Shipments Delivered", icon: TrendingUp },
+    { numericValue: 98, suffix: "%", label: "On-Time Rate", icon: Clock },
+    { numericValue: 24, suffix: "/7", label: "Support Available", icon: Shield },
 ]
 
 const milestones = [
@@ -37,17 +69,19 @@ export default function AboutPage() {
     return (
         <div className="flex flex-col">
             {/* Hero Section with Gradient Overlay */}
-            <section className="relative min-h-[500px] flex items-center bg-secondary text-white overflow-hidden">
+            <section className="relative min-h-[600px] flex items-center bg-secondary text-white overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-primary/80" />
-                <div className="absolute inset-0 opacity-10"
+                <div className="absolute inset-0 opacity-20"
                     style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                        backgroundImage: `url("/about_pattern.png")`,
+                        backgroundRepeat: "repeat",
+                        backgroundSize: "600px",
                     }}
                 />
                 {/* Decorative accent bar */}
                 <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-accent via-accent/60 to-transparent" />
 
-                <div className="container mx-auto px-4 md:px-6 relative z-10">
+                <div className="container mx-auto px-4 md:px-6 relative z-10 pt-12">
                     <motion.div {...fadeInUp} className="max-w-3xl">
                         <span className="inline-block bg-accent/20 backdrop-blur-sm text-accent border border-accent/30 px-4 py-1.5 rounded-full text-sm font-semibold mb-6 tracking-wide uppercase">
                             About Trueway Freight
@@ -85,7 +119,9 @@ export default function AboutPage() {
                                     <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-accent group-hover:scale-110 transition-all duration-300">
                                         <stat.icon className="h-6 w-6 text-primary group-hover:text-white transition-colors" />
                                     </div>
-                                    <div className="text-3xl md:text-4xl font-bold font-heading text-primary mb-1">{stat.value}</div>
+                                    <div className="text-3xl md:text-4xl font-bold font-heading text-primary mb-1">
+                                        <CountUp target={stat.numericValue} suffix={stat.suffix} duration={2} />
+                                    </div>
                                     <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
                                 </motion.div>
                             ))}
@@ -233,7 +269,7 @@ export default function AboutPage() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="text-center p-8 rounded-2xl border border-transparent hover:border-accent/30 hover:bg-accent/5 transition-all duration-300 group"
+                                className="text-center p-8 rounded-2xl border border-transparent hover:border-accent/100 hover:bg-accent/20 transition-all duration-300 group"
                             >
                                 <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
                                     <value.icon className="h-8 w-8 text-primary group-hover:text-white transition-colors" />

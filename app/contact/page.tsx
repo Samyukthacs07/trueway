@@ -4,6 +4,14 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { MapPin, Phone, Mail, Clock } from "lucide-react"
+import { motion } from "framer-motion"
+
+const fadeInUp = {
+    initial: { opacity: 0, y: 30 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: "-100px" },
+    transition: { duration: 0.6 }
+}
 
 export default function ContactPage() {
     const [submitted, setSubmitted] = useState(false)
@@ -15,12 +23,29 @@ export default function ContactPage() {
 
     return (
         <div className="flex flex-col">
-            <section className="bg-secondary text-white py-16">
-                <div className="container mx-auto px-4 md:px-6">
-                    <h1 className="text-3xl md:text-4xl font-bold font-heading mb-4">Contact Us</h1>
-                    <p className="text-lg text-gray-300 max-w-2xl">
-                        We are here to help with your logistics needs. Reach out to us directly or fill out the form.
-                    </p>
+            <section className="relative min-h-[600px] flex items-center bg-secondary text-white overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-primary/80" />
+                <div className="absolute inset-0 opacity-20"
+                    style={{
+                        backgroundImage: `url("/contact_pattern.png")`,
+                        backgroundRepeat: "repeat",
+                        backgroundSize: "600px",
+                    }}
+                />
+                <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-accent via-accent/60 to-transparent" />
+
+                <div className="container mx-auto px-4 md:px-6 relative z-10 pt-12">
+                    <motion.div {...fadeInUp} className="max-w-3xl">
+                        <span className="inline-block bg-accent/20 backdrop-blur-sm text-accent border border-accent/30 px-4 py-1.5 rounded-full text-sm font-semibold mb-6 tracking-wide uppercase">
+                            Get In Touch
+                        </span>
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading mb-6 leading-tight">
+                            Contact <span className="text-accent">Us</span>
+                        </h1>
+                        <p className="text-xl text-gray-300 max-w-2xl leading-relaxed">
+                            We are here to help with your logistics needs. Reach out to us directly or fill out the form.
+                        </p>
+                    </motion.div>
                 </div>
             </section>
 
@@ -29,7 +54,7 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
                         {/* Contact Information */}
-                        <div className="space-y-8">
+                        <motion.div {...fadeInUp} className="space-y-8">
                             <div>
                                 <h2 className="text-2xl font-bold font-heading text-secondary mb-6">Get in Touch</h2>
                                 <p className="text-muted-foreground mb-8">
@@ -38,50 +63,40 @@ export default function ContactPage() {
                             </div>
 
                             <div className="space-y-6">
-                                <div className="flex items-start gap-4">
-                                    <div className="bg-primary/10 p-3 rounded-lg text-primary">
-                                        <MapPin className="h-6 w-6" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold text-secondary">Head Office</h3>
-                                        <p className="text-muted-foreground">123 Logistics Way, Suite 100<br />Mississauga, ON L5T 2E7</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4">
-                                    <div className="bg-primary/10 p-3 rounded-lg text-primary">
-                                        <Phone className="h-6 w-6" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold text-secondary">Phone</h3>
-                                        <p className="text-muted-foreground">Toll Free: 1-800-555-0123<br />Local: 416-555-0123</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4">
-                                    <div className="bg-primary/10 p-3 rounded-lg text-primary">
-                                        <Mail className="h-6 w-6" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold text-secondary">Email</h3>
-                                        <p className="text-muted-foreground">Quotes: quotes@truewayfreight.com<br />Support: support@truewayfreight.com</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4">
-                                    <div className="bg-primary/10 p-3 rounded-lg text-primary">
-                                        <Clock className="h-6 w-6" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold text-secondary">Hours of Operation</h3>
-                                        <p className="text-muted-foreground">Monday - Friday: 8:00 AM - 6:00 PM EST<br />Saturday: 9:00 AM - 1:00 PM EST<br />24/7 Dispatch Support</p>
-                                    </div>
-                                </div>
+                                {[
+                                    { icon: MapPin, title: "Head Office", text: <>123 Logistics Way, Suite 100<br />Mississauga, ON L5T 2E7</> },
+                                    { icon: Phone, title: "Phone", text: <>Toll Free: 1-800-555-0123<br />Local: 416-555-0123</> },
+                                    { icon: Mail, title: "Email", text: <>Quotes: quotes@truewayfreight.com<br />Support: support@truewayfreight.com</> },
+                                    { icon: Clock, title: "Hours of Operation", text: <>Monday - Friday: 8:00 AM - 6:00 PM EST<br />Saturday: 9:00 AM - 1:00 PM EST<br />24/7 Dispatch Support</> },
+                                ].map((item, index) => (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, x: -30 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                                        className="flex items-start gap-4"
+                                    >
+                                        <div className="bg-primary/10 p-3 rounded-lg text-primary">
+                                            <item.icon className="h-6 w-6" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-secondary">{item.title}</h3>
+                                            <p className="text-muted-foreground">{item.text}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
                             </div>
-                        </div>
+                        </motion.div>
 
                         {/* Contact Form */}
-                        <div className="bg-white p-8 rounded-xl shadow-sm border border-border">
+                        <motion.div
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.7 }}
+                            className="bg-white p-8 rounded-xl shadow-sm border border-border"
+                        >
                             {submitted ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center py-12">
                                     <h3 className="text-2xl font-bold font-heading text-secondary mb-2">Message Sent</h3>
@@ -115,7 +130,7 @@ export default function ContactPage() {
                                     <Button type="submit" className="w-full">Send Message</Button>
                                 </form>
                             )}
-                        </div>
+                        </motion.div>
 
                     </div>
                 </div>

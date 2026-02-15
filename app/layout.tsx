@@ -26,8 +26,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ scrollBehavior: 'smooth' }}>
       <body
+        suppressHydrationWarning
         className={`${montserrat.variable} ${openSans.variable} antialiased flex flex-col min-h-screen`}
       >
         <Navbar />

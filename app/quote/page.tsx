@@ -4,6 +4,14 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CheckCircle } from "lucide-react"
+import { motion } from "framer-motion"
+
+const fadeInUp = {
+    initial: { opacity: 0, y: 30 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: "-100px" },
+    transition: { duration: 0.6 }
+}
 
 export default function QuotePage() {
     const [submitted, setSubmitted] = useState(false)
@@ -33,18 +41,42 @@ export default function QuotePage() {
 
     return (
         <div className="flex flex-col">
-            <section className="bg-secondary text-white py-16">
-                <div className="container mx-auto px-4 md:px-6">
-                    <h1 className="text-3xl md:text-4xl font-bold font-heading mb-4">Request a Freight Quote</h1>
-                    <p className="text-lg text-gray-300 max-w-2xl">
-                        Complete the form below to receive a competitive shipping rate. Fast response guaranteed.
-                    </p>
+            <section className="relative min-h-[600px] flex items-center bg-secondary text-white overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-primary/80" />
+                <div className="absolute inset-0 opacity-20"
+                    style={{
+                        backgroundImage: `url("/quote_pattern.png")`,
+                        backgroundRepeat: "repeat",
+                        backgroundSize: "600px",
+                    }}
+                />
+                <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-accent via-accent/60 to-transparent" />
+
+                <div className="container mx-auto px-4 md:px-6 relative z-10 pt-22">
+                    <motion.div {...fadeInUp} className="max-w-3xl">
+                        <span className="inline-block bg-accent/20 backdrop-blur-sm text-accent border border-accent/30 px-4 py-1.5 rounded-full text-sm font-semibold mb-6 tracking-wide uppercase">
+                            Request a Quote
+                        </span>
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading mb-6 leading-tight">
+                            Get a Freight <span className="text-accent">Quote</span>
+                        </h1>
+                        <p className="text-xl text-gray-300 max-w-2xl leading-relaxed">
+                            Complete the form below to receive a competitive shipping rate. Fast response guaranteed.
+                        </p>
+                    </motion.div>
                 </div>
             </section>
 
             <section className="py-16">
                 <div className="container mx-auto px-4 md:px-6 max-w-3xl">
-                    <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-xl shadow-sm border border-border">
+                    <motion.form
+                        onSubmit={handleSubmit}
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.7 }}
+                        className="space-y-8 bg-white p-8 rounded-xl shadow-sm border border-border"
+                    >
 
                         {/* Contact Info */}
                         <div className="space-y-4">
@@ -114,7 +146,7 @@ export default function QuotePage() {
 
                         <Button type="submit" size="lg" className="w-full text-lg">Submit Quote Request</Button>
 
-                    </form>
+                    </motion.form>
                 </div>
             </section>
         </div>

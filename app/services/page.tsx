@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { Counter } from "@/components/ui/counter"
 
 const services = [
     {
@@ -77,16 +78,18 @@ export default function ServicesPage() {
     return (
         <div className="flex flex-col">
             {/* Hero Section */}
-            <section className="relative min-h-[450px] flex items-center bg-secondary text-white overflow-hidden">
+            <section className="relative min-h-[600px] flex items-center bg-secondary text-white overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-primary/80" />
-                <div className="absolute inset-0 opacity-10"
+                <div className="absolute inset-0 opacity-15"
                     style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                        backgroundImage: `url("/services_pattern.png")`,
+                        backgroundRepeat: "repeat",
+                        backgroundSize: "600px",
                     }}
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-accent via-accent/60 to-transparent" />
 
-                <div className="container mx-auto px-4 md:px-6 relative z-10">
+                <div className="container mx-auto px-4 md:px-6 relative z-10 pt-12">
                     <motion.div {...fadeInUp} className="max-w-3xl">
                         <span className="inline-block bg-accent/20 backdrop-blur-sm text-accent border border-accent/30 px-4 py-1.5 rounded-full text-sm font-semibold mb-6 tracking-wide uppercase">
                             Our Services
@@ -212,9 +215,9 @@ export default function ServicesPage() {
                         </div>
                         <div className="flex flex-wrap gap-6">
                             {[
-                                { value: "500+", label: "Carriers" },
-                                { value: "98%", label: "On-Time" },
-                                { value: "24/7", label: "Support" },
+                                { value: 500, suffix: "+", label: "Carriers" },
+                                { value: 98, suffix: "%", label: "On-Time" },
+                                { value: 24, suffix: "/7", label: "Support" },
                             ].map((stat, i) => (
                                 <motion.div
                                     key={i}
@@ -224,7 +227,9 @@ export default function ServicesPage() {
                                     transition={{ duration: 0.4, delay: i * 0.1 }}
                                     className="text-center px-6"
                                 >
-                                    <div className="text-3xl font-bold font-heading text-accent">{stat.value}</div>
+                                    <div className="text-3xl font-bold font-heading text-accent">
+                                        <Counter value={stat.value} suffix={stat.suffix} />
+                                    </div>
                                     <div className="text-sm text-gray-300">{stat.label}</div>
                                 </motion.div>
                             ))}
